@@ -17,7 +17,9 @@
 # limitations under the License.
 #
 
-include_recipe "runit"
+if node['god']['init_style'] == 'runit'
+  include_recipe "runit"
+end
 
 gem_package "god" do
   action :install
