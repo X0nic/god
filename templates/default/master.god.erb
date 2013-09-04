@@ -3,6 +3,9 @@
 #
 God.load "/etc/god/conf.d/*.god"
 
+require 'tlsmail'
+Net::SMTP.enable_tls(OpenSSL::SSL::VERIFY_NONE)
+
 God::Contacts::Email.defaults do |d|
   d.from_email = "<%= node['god']['email']['from'] %>"
   d.from_name  = "God"
@@ -13,6 +16,9 @@ God::Contacts::Email.defaults do |d|
   d.server_port     = <%= node['god']['email']['server']['server_port'] %>
 
   <%- if node['god']['email']['server']['server_auth'] != false %>
+    <%- if node['god']['email']['server']['server_auth'] != true #server_auth = :login %>
+  d.server_auth     = :<%= node['god']['email']['server']['server_auth'] %>
+    <%- end %>
   d.server_domain   = "<%= node['god']['email']['server']['server_domain'] %>"
   d.server_user     = "<%= node['god']['email']['server']['server_user'] %>"
   d.server_password = "<%= node['god']['email']['server']['server_password'] %>"

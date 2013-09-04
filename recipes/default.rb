@@ -21,9 +21,11 @@ if node['god']['init_style'] == 'runit'
   include_recipe "runit"
 end
 
-gem_package "god" do
-  action :install
-  gem_binary node['god']['gem_binary'] if node['god']['gem_binary']
+["god", "tlsmail"].each do |gem|
+  gem_package gem do
+    action :install
+    gem_binary node['god']['gem_binary'] if node['god']['gem_binary']
+  end
 end
 
 directory "/etc/god/conf.d" do
